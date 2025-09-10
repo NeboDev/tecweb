@@ -30,5 +30,32 @@
         echo '<li>$house*5 es inválida porque el símbolo * no está permitido.</li>';
         echo '</ul>';
     ?>
+
+    <h2>Ejercicio 2</h2>
+    <p>Proporcionar los valores de $a, $b, $c como sigue:</p>
+    <p>$a = “ManejadorSQL”;<br>$b = 'MySQL’;<br>$c = &$a;</p>
+    <?php
+        $a = "ManejadorSQL";
+        $b = "MySQL";
+        $c = &$a;
+        echo '<h4>Respuestas:</h4>';
+        echo '<h5>a. Ahora muestra el contenido de cada variable:</h5>';
+        echo "<p>\$a = $a <br>\$b = $b<br>\$c = $c</p>";
+        echo '<h5>b. Agrega al código actual las siguientes asignaciones:</h5>';
+        echo '<p>$a = “PHP server” $b = &$a;</p>';
+        $a = "PHP server";
+        $b = &$a;
+        echo '<h5>c. Vuelve a mostrar el contenido de cada uno</h5>';
+        echo "<p>\$a = $a<br>\$b = $b<br>\$c = $c</p>";
+        echo '<h5>d. Describe y muestra en la pagina obtenida que ocurrio en el segundo bloque de asignaciones</h5>';
+        echo '<ul>';
+            echo '<li>Se cambio el valor de $a a "PHP server"</li>';
+            echo '<li>Se creo una referencia de $b a $a usando &$a por lo que $b ahora apunta al mismo valor que $a</li>';
+            echo '<li>Como $c era una referencia a $a  tambien cambio su valor a "PHP server"</li>';
+            echo '<li>Todas las variables ahora tienen el valor "PHP server"</li>';
+        echo '</ul>';
+        unset($a, $b, $c);
+    ?>
+
 </body>
 </html>

@@ -94,6 +94,7 @@
     <p>Lee y muestra los valores de las variables del ejercicio anterior, pero ahora con la ayuda de
         la matriz $GLOBALS o del modificador global de PHP.</p>
     <?php
+        echo '<h4>Respuestas</h4>';
         echo '$a = '.$GLOBALS['a']."<br>";
         echo '$b = '.$GLOBALS['b']."<br>";
         echo '$c = '.$GLOBALS['c']."<br>";
@@ -102,7 +103,22 @@
         echo "<br>";
         unset($a, $b, $c, $z);
     ?>
-
+    
+    <h2>Ejercicio 5</h2>
+    <p>Dar el valor de las variables $a, $b, $c al final del siguiente script:<br>
+        $a = “7 personas”;<br>
+        $b = (integer) $a;<br>
+        $a = “9E3”;<br>
+        $c = (double) $a;<br>        
+    </p>
+    <?php
+        echo '<h4>Respuestas</h4>';
+        $a = "7 personas";
+        $b = (integer) $a;
+        $a = "9E3";
+        $c = (double) $a;
+        echo "<p>\$a = $a <br>\$b = $b<br>\$c = $c</p>";
+    ?>
 
 </body>
 </html>

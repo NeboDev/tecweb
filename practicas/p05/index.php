@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Práctica 3</title>
+    <title>Práctica 5</title>
 </head>
 <body>
     <h2>Ejercicio 1</h2>
@@ -154,7 +154,21 @@
         echo '$c: ' . var_export($c, true) . "<br>";
         echo '$e: ' . var_export($e, true) . "<br>";
         echo '</p>';
+    ?>
 
+    <h2>Ejercicio 7</h2>
+    <p>Usando la variable predefinida $_SERVER, determina lo siguiente:</p>
+    <ol type="a">
+        <li>La versión de Apache y PHP,</li>
+        <li>El nombre del sistema operativo (servidor)</li>
+        <li>El idioma del navegador (cliente)</li>
+    </ol>
+    <?php
+        echo '<h4>Respuestas</h4>';
+        echo 'a. Version de Apache y PHP: ' . $_SERVER['SERVER_SOFTWARE'] . "<br>";
+        //No existe un indice concreto que nos de el nombre del SO pero con SERVER SIGNATURE se infiere PHP_OS si lo da.
+        echo 'b. OS del servidor: ' . $_SERVER['SERVER_SIGNATURE'] . "<br>";
+        echo 'c. Idioma del navegador: ' . $_SERVER['HTTP_ACCEPT_LANGUAGE'] . '<br>';
     ?>
 
 </body>

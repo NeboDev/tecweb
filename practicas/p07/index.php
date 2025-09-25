@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Práctica 4</title>
+    <title>Práctica 7</title>
 </head>
 <body>
     <h2>Ejercicio 1</h2>
@@ -11,6 +11,12 @@
     <?php
         require_once 'src/funciones.php';
         verificarMultiploDe5y7();
+    ?>
+    <h2>Ejercicio 2</h2>
+    <p>Crea un programa para la generación repetitiva de 3 números aleatorios hasta obtener una
+    secuencia compuesta por:<br>impar, par, impar</p>
+    <?php
+        secuenciaImparParImpar();
     ?>
 
     <h2>Ejemplo de POST</h2>

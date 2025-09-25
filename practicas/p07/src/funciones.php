@@ -53,4 +53,20 @@ function esMultiploDoWhile(){
     }
 }
 
+function tablaCaracteres() {
+    $caracteres = [];
+    for ($i = 97; $i <= 122; $i++) {
+        $caracteres[$i] = chr($i);
+    }
+
+    echo "<h3>Tabla de caracteres ASCII</h3>";
+    echo "<table border='1' cellpadding='5' cellspacing='0'>";
+    echo "<tr><th>Índice ASCII</th><th>Carácter</th></tr>";
+    foreach ($caracteres as $indice => $letra) {
+        echo "<tr><td>$indice</td><td>$letra</td></tr>";
+    }
+    echo "</table>";
+}
+
+
 ?>

@@ -29,7 +29,17 @@
         esMultiplo();
         esMultiploDoWhile();
     ?>
-
+    <h2>Ejercicio 4</h2>
+    <p>Crear un arreglo cuyos índices van de 97 a 122 y cuyos valores son las letras de la ‘a’
+        a la ‘z’. Usa la función chr(n) que devuelve el caracter cuyo código ASCII es n para poner
+        el valor en cada índice.</p>
+    <ul>
+        <li>Crea el arreglo con un ciclo for</li>
+        <li>Lee el arreglo y crea una tabla en XHTML con echo y un ciclo foreach</li>
+    </ul>
+    <?php
+        tablaCaracteres();
+    ?>
     <h2>Ejemplo de POST</h2>
     <form action="http://localhost/tecweb/practicas/p07/index.php" method="post">
         Name: <input type="text" name="name"><br>

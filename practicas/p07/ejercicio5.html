@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Ejercicio 5 - Formulario</title>
+  </head>
+  <body>
+    <h1>Formulario de validacion de Edad y Sexo</h1>
+
+    <form
+      action="http://localhost/tecweb/practicas/p07/src/validacionE5.php"
+      method="post"
+    >
+      <fieldset>
+        <legend>Datos Personales</legend>
+        <ul>
+          <li>Edad: <input type="number" name="edad" required /></li>
+          <li>
+            Sexo:
+            <select name="sexo" required>
+              <option value="femenino">Femenino</option>
+              <option value="masculino">Masculino</option>
+            </select>
+          </li>
+        </ul>
+      </fieldset>
+
+      <p><input type="submit" value="Verificar" /></p>
+    </form>
+  </body>
+</html>

@@ -18,6 +18,17 @@
     <?php
         secuenciaImparParImpar();
     ?>
+    <h2>Ejercicio 3</h2>
+    <p>Utiliza un ciclo while para encontrar el primer número entero obtenido aleatoriamente,
+    pero que además sea múltiplo de un número dado. </p>
+    <ul>
+        <li>Crear una variante de este script utilizando el ciclo do-while.</li>
+        <li>El número dado se debe obtener vía GET.</li>
+    </ul>
+    <?php
+        esMultiplo();
+        esMultiploDoWhile();
+    ?>
 
     <h2>Ejemplo de POST</h2>
     <form action="http://localhost/tecweb/practicas/p07/index.php" method="post">

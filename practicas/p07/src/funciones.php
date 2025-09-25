@@ -31,4 +31,26 @@ function secuenciaImparParImpar(){
     echo '<h3> R= '.$totalNumeros.' números obtenidos en '.count($numeros).' iteraciones</h3>';
 }
 
+function esMultiplo(){
+    if (isset($_GET['multiplo'])) {
+        $multiplo = $_GET['multiplo'];
+        while(true){
+            $num = rand();
+            if($num%$multiplo == 0){
+                echo '<h3>R= Multiplo de '.$multiplo.'  encontrado: '.$num.'</h3>';
+                break;
+            }
+        }
+    }
+}
+function esMultiploDoWhile(){
+    if (isset($_GET['multiplo'])) {
+        $multiplo = $_GET['multiplo'];
+        do{
+            $num = rand();
+        }while($num%$multiplo == 0);
+        echo '<h3>Variante do-While R= Multiplo de '.$multiplo.'  encontrado: '.$num.'</h3>';
+    }
+}
+
 ?>

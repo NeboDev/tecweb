@@ -40,6 +40,77 @@
     <?php
         tablaCaracteres();
     ?>
+    <h2>Ejercicio 5</h2>
+    <p>Usar las variables $edad y $sexo en una instrucción if para identificar una persona de 
+        sexo “femenino”, cuya edad oscile entre los 18 y 35 años y mostrar un mensaje de 
+        bienvenida apropiado. Por ejemplo: <br> 
+        Bienvenida, usted está en el rango de edad permitido. <br> 
+        En caso contrario, deberá devolverse otro mensaje indicando el error. </p>
+    <form
+      action="http://localhost/tecweb/practicas/p07/src/validacionE5.php"
+      method="post"
+    >
+      <fieldset>
+        <legend>Datos Personales</legend>
+        <ul>
+          <li>Edad: <input type="number" name="edad" required /></li>
+          <li>
+            Sexo:
+            <select name="sexo" required>
+              <option value="femenino">Femenino</option>
+              <option value="masculino">Masculino</option>
+            </select>
+          </li>
+        </ul>
+      </fieldset>
+      <p><input type="submit" value="Verificar" /></p>
+    </form>
+
+    <h2>Ejercicio 6</h2>
+    <p>Crea en código duro un arreglo asociativo que sirva para registrar el parque vehicular de 
+        una ciudad. Cada vehículo debe ser identificado por: </p>
+    <ul>
+        <li>Matricula</li>
+        <ul>
+            <li>Marca</li>
+            <li>Modelo (año)</li>
+            <li> Tipo (sedan|hachback|camioneta) </li>
+        </ul>
+        <li>Propietario</li>
+        <ul>
+            <li>Nombre</li>
+            <li>Ciudad</li>
+            <li>Direccion</li>
+        </ul>
+    </ul>
+    <p>La matrícula debe tener el siguiente formato LLLNNNN, donde las L pueden ser letras de 
+        la A-Z y las N pueden ser  números de 0-9. </p>
+    <form
+      action="http://localhost/tecweb/practicas/p07/src/validacionE6.php"
+      method="post"
+    >
+      <fieldset>
+        <legend>Selecciona el tipo de consulta</legend>
+
+        <label>
+          <input type="radio" name="tipoConsulta" value="matricula" required />
+          Por matricula </label
+        ><br />
+        <label>
+          <input type="radio" name="tipoConsulta" value="todos" />
+          Todos los coches </label
+        ><br />
+        <label for="matricula">Matricula:</label>
+        <input
+          type="text"
+          name="matricula"
+          id="matricula"
+          placeholder="Ej. ABC1234"
+        /> <br> <br>
+
+        <input type="submit" value="Consultar" />
+      </fieldset>
+    </form>
     <h2>Ejemplo de POST</h2>
     <form action="http://localhost/tecweb/practicas/p07/index.php" method="post">
         Name: <input type="text" name="name"><br>

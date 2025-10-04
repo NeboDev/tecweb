@@ -58,7 +58,7 @@ function ejemplo5() {
   var nota = prompt("Ingresa tu nota", "");
   if (nota >= 4) {
     var div1 = document.getElementById("mensaje2");
-    div2.innerHTML = "<p>" + nombre + " esta aprobado con un " + nota + "</p>";
+    div1.innerHTML = "<p>" + nombre + " esta aprobado con un " + nota + "</p>";
   }
 }
 
@@ -200,5 +200,84 @@ function ejemplo13() {
   for (f = 1; f <= 10; f++) {
     resultado += f + " ";
   }
+  div.innerHTML = "<p>" + resultado + "</p>";
+}
+
+function ejemplo14() {
+  var div = document.getElementById("mensaje4");
+  var mensaje =
+    "<p>" +
+    "Cuidado<br>Ingresa tu documento correctamente<br>" +
+    "Cuidado<br>Ingresa tu documento correctamente<br>" +
+    "Cuidado<br>Ingresa tu documento correctamente<br>" +
+    "</p>";
+  div.innerHTML = mensaje;
+}
+
+function ejemplo15() {
+  function mostrarMensaje() {
+    return "Cuidado<br>Ingresa tu documento correctamente<br>";
+  }
+  var div = document.getElementById("mensaje5");
+  var resultado =
+    "<p>" + mostrarMensaje() + mostrarMensaje() + mostrarMensaje() + "</p>";
+  div.innerHTML = resultado;
+}
+
+function ejemplo16() {
+  function mostrarRango(x1, x2) {
+    var resultado = "";
+    var i;
+    for (i = x1; i <= x2; i++) {
+      resultado += i + " ";
+    }
+    return resultado;
+  }
+  var valor1 = prompt("Ingresa el valor inferior:", "");
+  var valor2 = prompt("Ingresa el valor superior:", "");
+  valor1 = parseInt(valor1);
+  valor2 = parseInt(valor2);
+
+  var div = document.getElementById("mensaje6");
+  div.innerHTML = "<p>" + mostrarRango(valor1, valor2) + "</p>";
+}
+
+function ejemplo17() {
+  function convertirCastellano(x) {
+    if (x === 1) return "uno";
+    else if (x === 2) return "dos";
+    else if (x === 3) return "tres";
+    else if (x === 4) return "cuatro";
+    else if (x === 5) return "cinco";
+    else return "valor incorrecto";
+  }
+  var valor = prompt("Ingresa un valor entre 1 y 5:", "");
+  valor = parseInt(valor);
+  var r = convertirCastellano(valor);
+  var div = document.getElementById("mensaje7");
+  div.innerHTML = "<p>" + r + "</p>";
+}
+
+function ejemplo18() {
+  function convertirCastellanoSwitch(x) {
+    switch (x) {
+      case 1:
+        return "uno";
+      case 2:
+        return "dos";
+      case 3:
+        return "tres";
+      case 4:
+        return "cuatro";
+      case 5:
+        return "cinco";
+      default:
+        return "valor incorrecto";
+    }
+  }
+  var valor = prompt("Ingresa un valor entre 1 y 5:", "");
+  valor = parseInt(valor);
+  var resultado = convertirCastellanoSwitch(valor);
+  var div = document.getElementById("mensaje8");
   div.innerHTML = "<p>" + resultado + "</p>";
 }

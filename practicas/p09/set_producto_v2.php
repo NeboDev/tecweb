@@ -44,8 +44,9 @@
                     
                 } else {
                     /** Insertar el producto si no existe */
-                    $sql = "INSERT INTO productos VALUES (null, '{$nombre}', '{$marca}', '{$modelo}', {$precio}, '{$detalles}', {$unidades}, '{$imagen}', 0)";
-                    
+                    // $sql = "INSERT INTO productos VALUES (null, '{$nombre}', '{$marca}', '{$modelo}', {$precio}, '{$detalles}', {$unidades}, '{$imagen}', 0)";
+                    $sql = "INSERT INTO productos (nombre, marca, modelo, precio, detalles, unidades, imagen) 
+                            VALUES ('{$nombre}', '{$marca}', '{$modelo}', {$precio}, '{$detalles}', {$unidades}, '{$imagen}')";
                     if ($link->query($sql)) {
                         $id_insertado = $link->insert_id;
                         //Uso lo de bootstrap porque ya lo hemos estado usando en estas practicas

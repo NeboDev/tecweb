@@ -44,7 +44,7 @@
                     
                 } else {
                     /** Insertar el producto si no existe */
-                    $sql = "INSERT INTO productos VALUES (null, '{$nombre}', '{$marca}', '{$modelo}', {$precio}, '{$detalles}', {$unidades}, '{$imagen}')";
+                    $sql = "INSERT INTO productos VALUES (null, '{$nombre}', '{$marca}', '{$modelo}', {$precio}, '{$detalles}', {$unidades}, '{$imagen}', 0)";
                     
                     if ($link->query($sql)) {
                         $id_insertado = $link->insert_id;

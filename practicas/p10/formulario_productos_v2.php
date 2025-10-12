@@ -27,12 +27,16 @@
 
     <form
       id="formularioActualizacion"
-      action="http://localhost/tecweb/practicas/p10/set_producto_v2.php"
+      action="http://localhost/tecweb/practicas/p10/update_producto.php"
       method="post"
     >
       <fieldset>
         <legend>Datos del producto</legend>
         <ul>
+          <!-- //Es necesario que mande el ID para la actualizacion en la consulta SQL -->
+          <li> 
+            <input type="hidden" name="id" value="<?= !empty($_POST['id']) ? $_POST['id'] : $_GET['id'] ?>" />
+          </li>
           <li>
             <label for="form-name">Nombre:</label>
             <input
@@ -131,34 +135,38 @@
         <input
           type="submit"
           id="submit"
-          value="Registrar producto"
-          onclick="validarFormulario(event)"
+          value="Actualizar producto"
         />
       </p>
     </form>
 
-    <?php if (!empty($_GET['marca'])): ?>
-      <script>
+
+    <!-- //Esta validacion esta porque la lista desplegable me da problemas para colocar el valor mandado por get o post -->
+    <?php 
+      $marca = '';
+      if (!empty($_GET['marca'])) {
+          $marca = $_GET['marca'];
+      } elseif (!empty($_POST['marca'])) {
+          $marca = $_POST['marca'];
+      }
+    ?>
+
+    <?php if (!empty($marca)): ?>
+    <script>
         window.addEventListener("DOMContentLoaded", () => {
-          const marca = "<?= trim($_GET['marca']) ?>";
-
-          const select = document.getElementById("form-brand");
-          if (select) {
-            // Forzar seleccin
-            let found = false;
-
-            // Recorremos opciones y buscamos coincidencia (sin case/sensitive)
-            for (let option of select.options) {
-              if (option.value.trim().toLowerCase() === marca.trim().toLowerCase()) {
-                option.selected = true;
-                found = true;
-                break;
-              }
+            const marca = "<?= trim($marca) ?>";
+            const select = document.getElementById("form-brand");
+            if (select) {
+                for (let option of select.options) {
+                    if (option.value.trim().toLowerCase() === marca.trim().toLowerCase()) {
+                        option.selected = true;
+                        break;
+                    }
+                }
             }
-          }
         });
-      </script>
-      <?php endif; ?>
+    </script>
+    <?php endif; ?>
 
   </body>
 </html>

@@ -55,33 +55,33 @@
 		<title>Producto</title>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<script>
-			function show() {
-				var rowId = event.target.parentNode.parentNode.id;
-				var data = document.getElementById(rowId).querySelectorAll(".row-data");
+            function show(button) {
+            var row = button.closest('tr');
+            var id = row.getAttribute('data-id');
+            var data = row.querySelectorAll(".row-data");
 
-				var nombre = data[0].innerHTML;
-				var marca = data[1].innerHTML;
-				var modelo = data[2].innerHTML;
-				var precio = data[3].innerHTML;
-				var unidades = data[4].innerHTML;
-				var detalles = data[5].innerHTML;
-				var imagenHTML = data[6].innerHTML;
-				var imagen = imagenHTML.match(/src="([^"]*)"/)[1]; // Extraer solo la URL
+            var nombre = data[0].innerHTML;
+            var marca = data[1].innerHTML;
+            var modelo = data[2].innerHTML;
+            var precio = data[3].innerHTML;
+            var unidades = data[4].innerHTML;
+            var detalles = data[5].innerHTML;
+            var imagenHTML = data[6].innerHTML;
+            var imagen = imagenHTML.match(/src="([^"]*)"/)[1];
 
-				alert(
-					"Nombre: " + nombre + "\n" +
-					"Marca: " + marca + "\n" +
-					"Modelo: " + modelo + "\n" +
-					"Precio: $" + precio + "\n" +
-					"Unidades: " + unidades + "\n" +
-					"Detalles: " + detalles + "\n" +
-					"Imagen: " + imagen
-				);
+            alert(
+                "Nombre: " + nombre + "\n" +
+                "Marca: " + marca + "\n" +
+                "Modelo: " + modelo + "\n" +
+                "Precio: $" + precio + "\n" +
+                "Unidades: " + unidades + "\n" +
+                "Detalles: " + detalles + "\n" +
+                "Imagen: " + imagen
+            );
 
-				// Enviar los datos al formulario
-				send2form(nombre, marca, modelo, precio, unidades, detalles, imagen);
-			}
-		</script>
+            send2form(id, nombre, marca, modelo, precio, unidades, detalles, imagen);
+        }
+        </script>
 
 	</head>
 	<body>
@@ -128,30 +128,37 @@
 		<?php endif; ?>
 
 		<script>
-		function send2form(nombre, marca, modelo, precio, unidades, detalles, imagen) {
-			var urlForm = "http://localhost/tecweb/practicas/p10/formulario_productos_v2.php";
-			
-			// Limpiar espacios extra
-			nombre = nombre.trim();
-			marca = marca.trim();
-			modelo = modelo.trim();
-			precio = precio.trim();
-			unidades = unidades.trim();
-			detalles = detalles.trim();
-			imagen = imagen.trim();
-
-			var params = 
-				"nombre=" + encodeURIComponent(nombre) +
-				"&marca=" + encodeURIComponent(marca) +
-				"&modelo=" + encodeURIComponent(modelo) +
-				"&precio=" + encodeURIComponent(precio) +
-				"&unidades=" + encodeURIComponent(unidades) +
-				"&detalles=" + encodeURIComponent(detalles) +
-				"&imagen=" + encodeURIComponent(imagen);
-			
-			// Abrir el formulario con los datos
-			window.open(urlForm + "?" + params);
-		}
+            function send2form(id, nombre, marca, modelo, precio, unidades, detalles, imagen) {
+                var urlForm = "http://localhost/tecweb/practicas/p10/formulario_productos_v2.php";
+                
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = urlForm;
+                form.style.display = 'none';
+                
+                var fields = {
+                    'id': id,
+                    'nombre': nombre.trim(),
+                    'marca': marca.trim(),
+                    'modelo': modelo.trim(),
+                    'precio': precio.trim(),
+                    'unidades': unidades.trim(),
+                    'detalles': detalles.trim(),
+                    'imagen': imagen.trim()
+                };
+                
+                // El id se envia como  oculto para identificar el producto sin permitir que se edite
+                for (var key in fields) {
+                    var input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = fields[key];
+                    form.appendChild(input);
+                }
+                
+                document.body.appendChild(form);
+                form.submit();
+            }
 		</script>
 
 	</body>

@@ -30,32 +30,31 @@
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
         <script>
             function show(button) {
-                var row = button.closest('tr');
-                var data = row.querySelectorAll(".row-data");
+            var row = button.closest('tr');
+            var id = row.getAttribute('data-id');
+            var data = row.querySelectorAll(".row-data");
 
-                var nombre = data[0].innerHTML;
-                var marca = data[1].innerHTML;
-                var modelo = data[2].innerHTML;
-                var precio = data[3].innerHTML;
-                var unidades = data[4].innerHTML;
-                var detalles = data[5].innerHTML;
-                var imagenHTML = data[6].innerHTML;
-                var imagen = imagenHTML.match(/src="([^"]*)"/)[1]; // Extraer solo la URL
+            var nombre = data[0].innerHTML;
+            var marca = data[1].innerHTML;
+            var modelo = data[2].innerHTML;
+            var precio = data[3].innerHTML;
+            var unidades = data[4].innerHTML;
+            var detalles = data[5].innerHTML;
+            var imagenHTML = data[6].innerHTML;
+            var imagen = imagenHTML.match(/src="([^"]*)"/)[1];
 
-                // Mostrar los datos en un alert
-                alert(
-                    "Nombre: " + nombre + "\n" +
-                    "Marca: " + marca + "\n" +
-                    "Modelo: " + modelo + "\n" +
-                    "Precio: $" + precio + "\n" +
-                    "Unidades: " + unidades + "\n" +
-                    "Detalles: " + detalles + "\n" +
-                    "Imagen: " + imagen
-                );
+            alert(
+                "Nombre: " + nombre + "\n" +
+                "Marca: " + marca + "\n" +
+                "Modelo: " + modelo + "\n" +
+                "Precio: $" + precio + "\n" +
+                "Unidades: " + unidades + "\n" +
+                "Detalles: " + detalles + "\n" +
+                "Imagen: " + imagen
+            );
 
-                // Enviar los datos al formulario
-                send2form(nombre, marca, modelo, precio, unidades, detalles, imagen);
-            }
+            send2form(id, nombre, marca, modelo, precio, unidades, detalles, imagen);
+        }
         </script>
 
 	</head>
@@ -80,14 +79,14 @@
                     </thead>
                     <tbody>
                         <?php foreach($rows as $row): ?>
-                            <tr id="row-<?= $row['id'] ?>">
+                           <tr id="row-<?= $row['id'] ?>" data-id="<?= $row['id'] ?>">
                                 <th scope="row"><?= $row['id'] ?></th>
                                 <td class="row-data"><?= $row['nombre'] ?></td>
                                 <td class="row-data"><?= $row['marca'] ?></td>
                                 <td class="row-data"><?= $row['modelo'] ?></td>
                                 <td class="row-data"><?= $row['precio'] ?></td>
                                 <td class="row-data"><?= $row['unidades'] ?></td>
-                                <td class="row-data"><?= utf8_encode($row['detalles']) ?></td>
+                                <td class="row-data"><?= $row['detalles'] ?></td>
                                 <td class="row-data"><img src="<?= $row['imagen'] ?>" alt="Imagen producto" style="width:100px; height:100px;" /></td>
                                 <td><input type="button" value="Modificar" onclick="show(this)" /></td>
                             </tr>
@@ -106,29 +105,36 @@
         </p>
 
         <script>
-            function send2form(nombre, marca, modelo, precio, unidades, detalles, imagen) {
+            function send2form(id, nombre, marca, modelo, precio, unidades, detalles, imagen) {
                 var urlForm = "http://localhost/tecweb/practicas/p10/formulario_productos_v2.php";
                 
-                // Limpiar espacios extra
-                nombre = nombre.trim();
-                marca = marca.trim();
-                modelo = modelo.trim();
-                precio = precio.trim();
-                unidades = unidades.trim();
-                detalles = detalles.trim();
-                imagen = imagen.trim();
-
-                var params = 
-                    "nombre=" + encodeURIComponent(nombre) +
-                    "&marca=" + encodeURIComponent(marca) +
-                    "&modelo=" + encodeURIComponent(modelo) +
-                    "&precio=" + encodeURIComponent(precio) +
-                    "&unidades=" + encodeURIComponent(unidades) +
-                    "&detalles=" + encodeURIComponent(detalles) +
-                    "&imagen=" + encodeURIComponent(imagen);
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = urlForm;
+                form.style.display = 'none';
                 
-                // Abrir el formulario con los datos
-                window.open(urlForm + "?" + params);
+                var fields = {
+                    'id': id,
+                    'nombre': nombre.trim(),
+                    'marca': marca.trim(),
+                    'modelo': modelo.trim(),
+                    'precio': precio.trim(),
+                    'unidades': unidades.trim(),
+                    'detalles': detalles.trim(),
+                    'imagen': imagen.trim()
+                };
+                
+                // El id se envia como  oculto para identificar el producto sin permitir que se edite
+                for (var key in fields) {
+                    var input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = fields[key];
+                    form.appendChild(input);
+                }
+                
+                document.body.appendChild(form);
+                form.submit();
             }
 		</script>
     </body>

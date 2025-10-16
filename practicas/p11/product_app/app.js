@@ -5,7 +5,7 @@ var baseJSON = {
     "modelo": "XX-000",
     "marca": "NA",
     "detalles": "NA",
-    "imagen": "img/default.png"
+    "imagen": "img/imagen.png"
   };
 
 // FUNCIÓN CALLBACK DE BOTÓN "Buscar"
@@ -109,18 +109,82 @@ function buscarProducto(e) {
     };
     client.send("patronBusqueda=" + patronBusqueda);
 }
-// FUNCIÓN CALLBACK DE BOTÓN "Agregar Producto"
+
 function agregarProducto(e) {
     e.preventDefault();
 
-    // SE OBTIENE DESDE EL FORMULARIO EL JSON A ENVIAR
+    // ARRAY PARA ALMACENAR TODOS LOS ERRORES
+    var errores = [];
+
+    // OBTENER VALORES
+    var nombre = document.getElementById('name').value;
     var productoJsonString = document.getElementById('description').value;
-    // SE CONVIERTE EL JSON DE STRING A OBJETO
-    var finalJSON = JSON.parse(productoJsonString);
+
+
+    // Validar que el JSON sea un formato valido por si se equivoca el usuario
+    try {
+        var finalJSON = JSON.parse(productoJsonString);
+    } catch (error) {
+        alert("El formato JSON de la descripcion no es valido, se reestablecera");
+        document.getElementById('description').focus();
+        var JsonString = JSON.stringify(baseJSON,null,2);
+        document.getElementById("description").value = JsonString;
+        return false;
+    }
+
+    // VALIDACIONES DEL NOMBRE
+    if (nombre.trim() === "") {
+        errores.push("- El nombre del producto es obligatorio");
+    } else if (nombre.length > 100) {
+        errores.push("- El nombre debe ser ≤ 100 caracteres");
+    }
+    
+    // Validar marca
+    if (!finalJSON.marca || finalJSON.marca === "NA"|| finalJSON.marca.trim() === "") {
+        errores.push("- La marca es obligatoria");
+    }
+
+    // Validar modelo
+    if (!finalJSON.modelo || finalJSON.modelo === "XX-000" || finalJSON.modelo.trim() === "") {
+        errores.push("- El modelo es requerido");
+    } else if (finalJSON.modelo.length > 25) {
+        errores.push("- El modelo debe ser ≤ 25 caracteres");
+    }
+
+    // Validar precio
+    var precio = parseFloat(finalJSON.precio);
+    if (isNaN(precio) || precio <= 99.99) {
+        errores.push("- El precio debe ser mayor a 99.99");
+    }
+
+    // Validar unidades
+    var unidades = parseInt(finalJSON.unidades);
+    if (isNaN(unidades) || unidades < 0) {
+        errores.push("- Las unidades deben ser ≥ 0");
+    }
+
+    // Validar detalles
+    if (finalJSON.detalles && finalJSON.detalles.length > 250) {
+        errores.push("- Los detalles no pueden tener mas de 250 caracteres");
+    }
+
+    // Asignar imagen por defecto si esta vacio el campo
+    if (!finalJSON.imagen || finalJSON.imagen.trim() === "") {
+        finalJSON.imagen = "img/imagen.png";
+    }
+
+    // SI HAY ERRORES SE MUESTRAN EN EL ALERT
+    if (errores.length > 0) {
+        var mensajeError = "Por favor, corrige los siguientes errores:\n\n" + errores.join('\n');
+        alert(mensajeError);
+        return false;
+    }
+
+
     // SE AGREGA AL JSON EL NOMBRE DEL PRODUCTO
-    finalJSON['nombre'] = document.getElementById('name').value;
+    finalJSON['nombre'] = nombre;
     // SE OBTIENE EL STRING DEL JSON FINAL
-    productoJsonString = JSON.stringify(finalJSON,null,2);
+    productoJsonString = JSON.stringify(finalJSON, null, 2);
 
     // SE CREA EL OBJETO DE CONEXIÓN ASÍNCRONA AL SERVIDOR
     var client = getXMLHttpRequest();
@@ -129,10 +193,21 @@ function agregarProducto(e) {
     client.onreadystatechange = function () {
         // SE VERIFICA SI LA RESPUESTA ESTÁ LISTA Y FUE SATISFACTORIA
         if (client.readyState == 4 && client.status == 200) {
-            console.log(client.responseText);
+            var respuesta = JSON.parse(client.responseText);
+             if (respuesta.status === 'success') { //SI SE PUDO AGREGAR
+                alert(respuesta.message);
+                // Limpiar el formulario despues de agregar
+                document.getElementById('name').value = '';
+                document.getElementById('description').value = JSON.stringify(baseJSON, null, 2);
+            } else {
+                //NO SE PUEDO AGREGAR
+                alert('Error\n'+respuesta.message);
+            }
         }
     };
     client.send(productoJsonString);
+    
+    return true;
 }
 
 // SE CREA EL OBJETO DE CONEXIÓN COMPATIBLE CON EL NAVEGADOR

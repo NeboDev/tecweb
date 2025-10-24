@@ -42,7 +42,7 @@ $(document).ready(function () {
             template += `
               <tr productId="${product.id}">
                 <td>${product.id}</td>
-                <td>${product.nombre}</td>
+                <td><a href="#" class="product-item">${product.nombre}</a></td>
                 <td><ul>${descripcion}</ul></td>
                 <td>
                   <button class="product-delete btn btn-danger">
@@ -149,9 +149,15 @@ $(document).ready(function () {
       marca: valJSON.marca,
       detalles: valJSON.detalles ? valJSON.detalles.trim() : "",
       imagen: valJSON.imagen,
+      id: $("#productId").val(),
     });
 
-    $.post("./backend/product-add.php", postData, function (response) {
+    let url =
+      edit === false
+        ? "./backend/product-add.php"
+        : "./backend/product-edit.php";
+
+    $.post(url, postData, function (response) {
       const data = JSON.parse(response);
       let displayHTML = `
                   <p><strong>status:</strong> ${data.status} <br> ${data.message}</p>
@@ -181,7 +187,7 @@ $(document).ready(function () {
           template += `
           <tr productId="${product.id}">
             <td>${product.id}</td>
-            <td>${product.nombre}</td>
+            <td><a href="#" class="product-item">${product.nombre}</a></td>
             <td><ul>${descripcion}</ul></td>
             <td>
               <button class="product-delete btn btn-danger">
@@ -216,5 +222,23 @@ $(document).ready(function () {
         },
       );
     }
+  });
+
+  $(document).on("click", ".product-item", function () {
+    let productId = $(this).closest("tr").attr("productId");
+    $.post(
+      "./backend/product-single.php",
+      { id: productId },
+      function (response) {
+        const data = JSON.parse(response);
+        $("#name").val(data.nombre);
+        const { nombre, id, eliminado, ...datosSinNombre } = data; //copia sin el nombre ni el id
+        const productData = Object.assign({}, baseJSON, datosSinNombre);
+        const jsonString = JSON.stringify(productData, null, 2);
+        $("#description").val(jsonString);
+        $("#productId").val(data.id);
+        edit = true;
+      },
+    );
   });
 });

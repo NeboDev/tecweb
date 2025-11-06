@@ -47,16 +47,23 @@ $(document).ready(function () {
   //FUNCION PARA VALIDAR EL NOMBRE
   function validarName() {
     const nombre = $("#name").val().trim();
-    validationState.name.isValid = false;
     validationState.name.touched = true;
-    if (!nombre) {
-      validationState.name.message = "El nombre es requerido";
-    } else if (nombre.length > 100) {
-      validationState.name.message =
-        "El nombre debe tener máximo 100 caracteres";
-    } else {
-      validationState.name.isValid = true;
-      validationState.name.message = "";
+
+    // NO SE SOBRESCRIBE EL MENSAJE SI ESTA EK DE NOMBRE DUPLICADO
+    if (
+      validationState.name.message !== "Ya existe un producto con este nombre"
+    ) {
+      validationState.name.isValid = false;
+
+      if (!nombre) {
+        validationState.name.message = "El nombre es requerido";
+      } else if (nombre.length > 100) {
+        validationState.name.message =
+          "El nombre debe tener máximo 100 caracteres";
+      } else {
+        validationState.name.isValid = true;
+        validationState.name.message = "";
+      }
     }
 
     mostrarValidacionesStatus();
@@ -276,33 +283,42 @@ $(document).ready(function () {
   });
 
   $("#name").keyup(function () {
-    if ($(this).val().length > 0) {
-      const nombre = $(this).val();
-      $.ajax({
-        url: "./backend/product-name.php",
-        data: { nombre: nombre },
-        type: "GET",
-        success: function (response) {
-          const productos = JSON.parse(response);
+    const nombre = $(this).val().trim();
 
-          if (Object.keys(productos).length > 0) {
-            let template_bar = `
-              <li style="list-style: none;">Ya existe un producto con el nombre: "${nombre}"</li>
-            `;
-            $("#container").html(template_bar);
-            $("#product-result").show();
+    if (nombre.length > 0) {
+      if (nombre.length >= 2) {
+        $.ajax({
+          url: "./backend/product-name.php",
+          data: { nombre: nombre },
+          type: "GET",
+          success: function (response) {
+            const productos = JSON.parse(response);
 
-            validationState.name.isValid = false;
-            validationState.name.message = "El nombre ya existe";
-          } else {
-            let template_bar = `
-              <li style="list-style: none;">El nombre: "${nombre}" es valido</li>
-            `;
-            $("#container").html(template_bar);
-            $("#product-result").show();
-          }
-        },
-      });
+            if (Object.keys(productos).length > 0) {
+              // NOMBRE DUPLICADO
+              validationState.name.isValid = false;
+              validationState.name.message =
+                "Ya existe un producto con este nombre";
+              validationState.name.touched = true;
+
+              let template_bar = `
+                <li style="list-style: none;">Ya existe un producto con el nombre: "${nombre}"</li>
+              `;
+              $("#container").html(template_bar);
+              $("#product-result").show();
+            } else {
+              let template_bar = `
+                <li style="list-style: none;">El nombre: "${nombre}" es válido</li>
+              `;
+              $("#container").html(template_bar);
+              $("#product-result").show();
+
+              // LIMPIAR EL ESTADO DE VALIDACION
+              validationState.name.message = "";
+            }
+          },
+        });
+      }
     } else {
       $("#product-result").hide();
     }
@@ -348,6 +364,14 @@ $(document).ready(function () {
                     `;
       // SE REINICIA EL FORMULARIO
       $("#product-form")[0].reset();
+
+      // SE LIMPIA ESTADO DE VALIDACION
+      for (const field in validationState) {
+        validationState[field].isValid = false;
+        validationState[field].message = "";
+        validationState[field].touched = false;
+      }
+
       // SE HACE VISIBLE LA BARRA DE ESTADO
       $("#product-result").show();
       // SE INSERTA LA PLANTILLA PARA LA BARRA DE ESTADO

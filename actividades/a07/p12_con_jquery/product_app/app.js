@@ -23,7 +23,7 @@ $(document).ready(function () {
   $("#details").on("blur", validarDetails);
 
   //FUNCION PARA MOSTRAR LAS VALIDACIONES EN LA BARRA DE STATUS
-  function mostrarValiacionesStatus() {
+  function mostrarValidacionesStatus() {
     let template = "";
     let campoEditado = false;
     for (const field in validationState) {
@@ -59,7 +59,7 @@ $(document).ready(function () {
       validationState.name.message = "";
     }
 
-    mostrarValiacionesStatus();
+    mostrarValidacionesStatus();
     return validationState.name.isValid;
   }
 
@@ -77,7 +77,7 @@ $(document).ready(function () {
       validationState.price.message = "";
     }
 
-    mostrarValiacionesStatus();
+    mostrarValidacionesStatus();
     return validationState.price.isValid;
   }
 
@@ -97,7 +97,7 @@ $(document).ready(function () {
       validationState.units.message = "";
     }
 
-    mostrarValiacionesStatus();
+    mostrarValidacionesStatus();
     return validationState.units.isValid;
   }
 
@@ -117,7 +117,7 @@ $(document).ready(function () {
       validationState.model.message = "";
     }
 
-    mostrarValiacionesStatus();
+    mostrarValidacionesStatus();
     return validationState.model.isValid;
   }
 
@@ -134,7 +134,7 @@ $(document).ready(function () {
       validationState.brand.message = "";
     }
 
-    mostrarValiacionesStatus();
+    mostrarValidacionesStatus();
     return validationState.brand.isValid;
   }
 
@@ -152,7 +152,7 @@ $(document).ready(function () {
       validationState.details.message = "";
     }
 
-    mostrarValiacionesStatus();
+    mostrarValidacionesStatus();
     return validationState.details.isValid;
   }
 
@@ -294,7 +294,7 @@ $(document).ready(function () {
       let template_bar = `
           <li style="list-style: none;">Error: Por favor corrige los campos invalidos</li>
         `;
-      $("#container").html(template_bar);
+      $("#container").append(template_bar);
       $("#product-result").show();
       return; // NO SE ENVIA SI HAY ERRORES
     }
@@ -305,7 +305,6 @@ $(document).ready(function () {
         : "./backend/product-edit.php";
 
     $.post(url, postData, (response) => {
-      //console.log(response);
       // SE OBTIENE EL OBJETO DE DATOS A PARTIR DE UN STRING JSON
       let respuesta = JSON.parse(response);
       // SE CREA UNA PLANTILLA PARA CREAR INFORMACIÓN DE LA BARRA DE ESTADO

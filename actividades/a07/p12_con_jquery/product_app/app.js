@@ -1,8 +1,178 @@
 $(document).ready(function () {
   let edit = false;
 
+  let validationState = {
+    name: { isValid: false, message: "", touched: false },
+    price: { isValid: false, message: "", touched: false },
+    units: { isValid: false, message: "", touched: false },
+    model: { isValid: false, message: "", touched: false },
+    brand: { isValid: false, message: "", touched: false },
+    details: { isValid: true, message: "", touched: false },
+    img: { isValid: true, message: "", touched: false },
+  };
+
   $("#product-result").hide();
   listarProductos();
+
+  //EVENTOS DE VALIDACION CADA QUE CAMBIA EL FOCO
+  $("#name").on("blur", validarName);
+  $("#price").on("blur", validarPrice);
+  $("#units").on("blur", validarUnits);
+  $("#model").on("blur", validarModel);
+  $("#brand").on("blur", validarBrand);
+  $("#details").on("blur", validarDetails);
+
+  //FUNCION PARA MOSTRAR LAS VALIDACIONES EN LA BARRA DE STATUS
+  function mostrarValiacionesStatus() {
+    let template = "";
+    let campoEditado = false;
+    for (const field in validationState) {
+      const status = validationState[field];
+      if (status.touched && status.message) {
+        campoEditado = true;
+        template += `
+         <li style="list-style: none;">${status.message}</li>
+       `;
+      }
+    }
+
+    if (campoEditado) {
+      $("#container").html(template);
+      $("#product-result").show();
+    } else {
+      $("#product-result").hide();
+    }
+  }
+
+  //FUNCION PARA VALIDAR EL NOMBRE
+  function validarName() {
+    const nombre = $("#name").val().trim();
+    validationState.name.isValid = false;
+    validationState.name.touched = true;
+    if (!nombre) {
+      validationState.name.message = "El nombre es requerido";
+    } else if (nombre.length > 100) {
+      validationState.name.message =
+        "El nombre debe tener máximo 100 caracteres";
+    } else {
+      validationState.name.isValid = true;
+      validationState.name.message = "";
+    }
+
+    mostrarValiacionesStatus();
+    return validationState.name.isValid;
+  }
+
+  //FUNCION PARA VALIDAR EL PRECIO
+  function validarPrice() {
+    const precio = parseFloat($("#price").val());
+    validationState.price.isValid = false;
+    validationState.price.touched = true;
+    if (isNaN(precio)) {
+      validationState.price.message = "El precio es requerido";
+    } else if (precio <= 99.99) {
+      validationState.price.message = "El precio debe ser mayor a 99.99";
+    } else {
+      validationState.price.isValid = true;
+      validationState.price.message = "";
+    }
+
+    mostrarValiacionesStatus();
+    return validationState.price.isValid;
+  }
+
+  //FUNCION PARA VALIDAR LAS UNIDADES
+  function validarUnits() {
+    const unidades = parseInt($("#units").val());
+    validationState.units.isValid = false;
+    validationState.units.touched = true;
+
+    if (isNaN(unidades)) {
+      validationState.units.message = "Las unidades son requeridas";
+    } else if (unidades < 0) {
+      validationState.units.message =
+        "Las unidades deben ser mayor o igual a 0";
+    } else {
+      validationState.units.isValid = true;
+      validationState.units.message = "";
+    }
+
+    mostrarValiacionesStatus();
+    return validationState.units.isValid;
+  }
+
+  //FUNCION PARA VALIDAR EL MODELO
+  function validarModel() {
+    const modelo = $("#model").val().trim();
+    validationState.model.isValid = false;
+    validationState.model.touched = true;
+
+    if (!modelo) {
+      validationState.model.message = "El modelo es requerido";
+    } else if (modelo.length > 25) {
+      validationState.model.message =
+        "El modelo debe tener maximo 25 caracteres";
+    } else {
+      validationState.model.isValid = true;
+      validationState.model.message = "";
+    }
+
+    mostrarValiacionesStatus();
+    return validationState.model.isValid;
+  }
+
+  //FUNCION PARA VALIDAR LA MARCA
+  function validarBrand() {
+    const marca = $("#brand").val().trim();
+    validationState.brand.isValid = false;
+    validationState.brand.touched = true;
+
+    if (!marca) {
+      validationState.brand.message = "La marca es requerida";
+    } else {
+      validationState.brand.isValid = true;
+      validationState.brand.message = "";
+    }
+
+    mostrarValiacionesStatus();
+    return validationState.brand.isValid;
+  }
+
+  //FUNCION PARA VALIDAR LOS DETALLES
+  function validarDetails() {
+    const detalles = $("#details").val().trim();
+    validationState.details.isValid = true;
+    validationState.details.touched = true;
+
+    if (detalles.length > 250) {
+      validationState.details.isValid = false;
+      validationState.details.message =
+        "Los detalles deben tener maximo 250 caracteres";
+    } else {
+      validationState.details.message = "";
+    }
+
+    mostrarValiacionesStatus();
+    return validationState.details.isValid;
+  }
+
+  function validarFormulario() {
+    // SE MARCAN LOS CAMPTOS COMO EDITADOS PARA MOSTRAR TODOS LOS ERRORES CUANDO ENVIE EL FORMULARIO
+    for (const field in validationState) {
+      validationState[field].touched = true;
+    }
+
+    const validaciones = [
+      validarName(),
+      validarPrice(),
+      validarUnits(),
+      validarModel(),
+      validarBrand(),
+      validarDetails(),
+    ];
+    //FAT ARROW FUNCTION PARA VERIFICAR QUE TODAS LAS VALIDACIONES SEAN VALIDAS :/
+    return validaciones.every((valid) => valid === true);
+  }
 
   function listarProductos() {
     $.ajax({
@@ -120,10 +290,14 @@ $(document).ready(function () {
       imagen: $("#img").val() || "img/default.png",
     };
 
-    /**
-     * AQUÍ DEBES AGREGAR LAS VALIDACIONES DE LOS DATOS EN EL JSON
-     * --> EN CASO DE NO HABER ERRORES, SE ENVIAR EL PRODUCTO A AGREGAR
-     **/
+    if (!validarFormulario()) {
+      let template_bar = `
+          <li style="list-style: none;">Error: Por favor corrige los campos invalidos</li>
+        `;
+      $("#container").html(template_bar);
+      $("#product-result").show();
+      return; // NO SE ENVIA SI HAY ERRORES
+    }
 
     const url =
       edit === false
@@ -181,6 +355,11 @@ $(document).ready(function () {
 
       // EL ID SE INSERTA EN UN CAMPO OCULTO PARA USARLO EN LA ACTUALIZACION
       $("#productId").val(product.id);
+
+      // SE REINICIA EL ESTADO DE EDITADO PARA QUE SOLO MUESTE LOS CAMPOS QUE SE EDITEN
+      for (const field in validationState) {
+        validationState[field].touched = false;
+      }
 
       // SE PONE LA BANDERA DE EDICIÓN EN true
       edit = true;

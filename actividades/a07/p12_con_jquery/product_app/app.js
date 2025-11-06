@@ -1,18 +1,6 @@
-// JSON BASE A MOSTRAR EN FORMULARIO
-var baseJSON = {
-  precio: 0.0,
-  unidades: 1,
-  modelo: "XX-000",
-  marca: "NA",
-  detalles: "NA",
-  imagen: "img/default.png",
-};
-
 $(document).ready(function () {
   let edit = false;
 
-  let JsonString = JSON.stringify(baseJSON, null, 2);
-  $("#description").val(JsonString);
   $("#product-result").hide();
   listarProductos();
 
@@ -120,11 +108,17 @@ $(document).ready(function () {
   $("#product-form").submit((e) => {
     e.preventDefault();
 
-    // SE CONVIERTE EL JSON DE STRING A OBJETO
-    let postData = JSON.parse($("#description").val());
-    // SE AGREGA AL JSON EL NOMBRE DEL PRODUCTO
-    postData["nombre"] = $("#name").val();
-    postData["id"] = $("#productId").val();
+    // SE CREA EL OBJETO CON LOS DATOS DE LOS CAMPOS DEL FORMULARIO
+    let postData = {
+      nombre: $("#name").val(),
+      id: $("#productId").val(),
+      precio: parseFloat($("#price").val()),
+      unidades: parseInt($("#units").val()),
+      modelo: $("#model").val(),
+      marca: $("#brand").val(),
+      detalles: $("#details").val() || "NA",
+      imagen: $("#img").val() || "img/default.png",
+    };
 
     /**
      * AQUÍ DEBES AGREGAR LAS VALIDACIONES DE LOS DATOS EN EL JSON
@@ -147,8 +141,7 @@ $(document).ready(function () {
                         <li style="list-style: none;">message: ${respuesta.message}</li>
                     `;
       // SE REINICIA EL FORMULARIO
-      $("#name").val("");
-      $("#description").val(JsonString);
+      $("#product-form")[0].reset();
       // SE HACE VISIBLE LA BARRA DE ESTADO
       $("#product-result").show();
       // SE INSERTA LA PLANTILLA PARA LA BARRA DE ESTADO
@@ -177,18 +170,17 @@ $(document).ready(function () {
     $.post("./backend/product-single.php", { id }, (response) => {
       // SE CONVIERTE A OBJETO EL JSON OBTENIDO
       let product = JSON.parse(response);
-      // SE INSERTAN LOS DATOS ESPECIALES EN LOS CAMPOS CORRESPONDIENTES
+      // SE INSERTAN LOS DATOS EN LOS CAMPOS CORRESPONDIENTES
       $("#name").val(product.nombre);
-      // EL ID SE INSERTA EN UN CAMPO OCULTO PARA USARLO DESPUÉS PARA LA ACTUALIZACIÓN
+      $("#price").val(product.precio);
+      $("#units").val(product.unidades);
+      $("#model").val(product.modelo);
+      $("#brand").val(product.marca);
+      $("#details").val(product.detalles);
+      $("#img").val(product.imagen);
+
+      // EL ID SE INSERTA EN UN CAMPO OCULTO PARA USARLO EN LA ACTUALIZACION
       $("#productId").val(product.id);
-      // SE ELIMINA nombre, eliminado E id PARA PODER MOSTRAR EL JSON EN EL <textarea>
-      delete product.nombre;
-      delete product.eliminado;
-      delete product.id;
-      // SE CONVIERTE EL OBJETO JSON EN STRING
-      let JsonString = JSON.stringify(product, null, 2);
-      // SE MUESTRA STRING EN EL <textarea>
-      $("#description").val(JsonString);
 
       // SE PONE LA BANDERA DE EDICIÓN EN true
       edit = true;

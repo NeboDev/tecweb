@@ -275,6 +275,39 @@ $(document).ready(function () {
     }
   });
 
+  $("#name").keyup(function () {
+    if ($(this).val().length > 0) {
+      const nombre = $(this).val();
+      $.ajax({
+        url: "./backend/product-name.php",
+        data: { nombre: nombre },
+        type: "GET",
+        success: function (response) {
+          const productos = JSON.parse(response);
+
+          if (Object.keys(productos).length > 0) {
+            let template_bar = `
+              <li style="list-style: none;">Ya existe un producto con el nombre: "${nombre}"</li>
+            `;
+            $("#container").html(template_bar);
+            $("#product-result").show();
+
+            validationState.name.isValid = false;
+            validationState.name.message = "El nombre ya existe";
+          } else {
+            let template_bar = `
+              <li style="list-style: none;">El nombre: "${nombre}" es valido</li>
+            `;
+            $("#container").html(template_bar);
+            $("#product-result").show();
+          }
+        },
+      });
+    } else {
+      $("#product-result").hide();
+    }
+  });
+
   $("#product-form").submit((e) => {
     e.preventDefault();
 

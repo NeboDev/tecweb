@@ -1,5 +1,5 @@
 <?php
-namespace backend\myapi;
+namespace MyAPI;
 
 include_once __DIR__ . "/DataBase.php";
 
@@ -7,7 +7,7 @@ class Products extends DataBase
 {
     private $data = [];
 
-    public function __construct($db, $user = "root", $pass = "123456789")
+    public function __construct($db, $user = "root", $pass = "1234567890")
     {
         parent::__construct($db, $user, $pass);
         $this->data = [];
@@ -26,7 +26,6 @@ class Products extends DataBase
         if ($result->num_rows == 0) {
             $sql = "INSERT INTO productos VALUES (null, '{$product->nombre}', '{$product->marca}', '{$product->modelo}',
                 {$product->precio}, '{$product->detalles}', {$product->unidades}, '{$product->imagen}', 0)";
-            $this->conexion->query($sql);
 
             if ($this->conexion->query($sql)) {
                 $this->data["status"] = "success";

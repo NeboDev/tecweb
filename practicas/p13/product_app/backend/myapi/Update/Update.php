@@ -3,7 +3,7 @@ namespace MyAPI\Update;
 
 class Update extends \MyAPI\DataBase
 {
-    public function __construct($user = 'root', $pass = '1234567890', $db)
+    public function __construct($db, $user = 'root', $pass = '1234567890')
     {
         parent::__construct($user, $pass, $db);
     }

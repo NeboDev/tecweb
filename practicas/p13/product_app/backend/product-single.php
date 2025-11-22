@@ -1,7 +1,7 @@
 <?php
-use MyAPI\Products;
-require_once __DIR__ . "/myapi/Products.php";
-$productos = new Products("marketzone");
+use MyAPI\Read\Read;
+require_once __DIR__ . "/../vendor/autoload.php";
+$productos = new Read("marketzone");
 
 $productos->single($_POST["id"]);
 echo $productos->getData();

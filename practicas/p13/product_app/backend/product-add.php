@@ -1,7 +1,9 @@
 <?php
-use MyAPI\Products;
-require_once __DIR__ . "/myapi/Products.php";
-$productos = new Products("marketzone");
+require_once __DIR__ . "/../vendor/autoload.php";
+use MyAPI\Create\Create;
+
+
+$productos = new Create("marketzone");
 
 $productos->add((object) $_POST);
 echo $productos->getData();
